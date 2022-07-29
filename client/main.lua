@@ -97,6 +97,8 @@ end)
 
 RegisterNUICallback("doATMWithdraw", function(data, cb)
     if data ~= nil then
+        TriggerServerEvent('logsystem:log', GetPlayerServerId(PlayerId()), "Withdrew Money ("..tostring(data.amount)..") from ("..tostring(data.cid)..")")
+
         TriggerServerEvent('qb-atms:server:doAccountWithdraw', data)
     end
 end)
@@ -106,7 +108,8 @@ RegisterNUICallback("loadBankingAccount", function(data, cb)
         if banking ~= false and type(banking) == "table" then
             SendNUIMessage({
                 status = "loadBankAccount",
-                information = banking
+                information = banking,
+                isbizacc = data.bizacc
             })
         else
             SetNuiFocus(false, false)
@@ -114,7 +117,7 @@ RegisterNUICallback("loadBankingAccount", function(data, cb)
                 status = "closeATM"
             })
         end
-    end, data.cid, data.cardnumber)
+    end, data.cid, data.cardnumber, data.bizacc)
 end)
 
 RegisterNUICallback("removeCard", function(data, cb)

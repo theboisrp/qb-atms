@@ -6,6 +6,7 @@ var clientPin = null;
 var cardSelected = null
 var clientCid = null
 var cardNumb = null
+var isbizacc = null
 
 window.addEventListener("message", function (event) {    
     if(event.data.status == "openATMFrontScreen") {
@@ -146,10 +147,10 @@ $( function() {
                 } else {
                     $('#pinCode').val('');
                     $('#errorMsg').removeClass('alert-info').addClass('alert-danger');
-                    $('#errorMsg').html('You have entered an incorrect pin, please try again.')
+                    $('#errorMsg').html('You have entered an incorrect pin, please try again.' + clientPin)
                     setTimeout(function () {
                         $('#errorMsg').addClass('alert-info').removeClass('alert-danger');
-                        $('#errorMsg').html('Please enter your debit card pin, to access the ATM.');
+                        $('#errorMsg').html('Please enter your debit card pin, to access the ATM.' + clientPin);
                     }, 5000);
                 }
             }
@@ -167,6 +168,7 @@ $( function() {
         cardSelected = selectedCard
         clientCid = selectedCard.citizenid;
         cardNumb = selectedCard.cardNumber
+        isbizacc = selectedCard.bizacc;
         $('#cardSelector').css({"display":"none"});
         $('#pinContainer').css({"display":"block"});
     });
@@ -211,7 +213,8 @@ $( function() {
                     $('#pinCode').val('');
                     $.post("https://qb-atms/loadBankingAccount", JSON.stringify({
                         cid: clientCid,
-                        cardnumber: cardNumb
+                        cardnumber: cardNumb,
+                        bizacc: isbizacc
                     }));
                 } else {
                     $('#pinCode').val('');
